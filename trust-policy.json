@@ -1,16 +1,18 @@
 {
+  "version": 1,
   "includes": [
     "skills/**/SKILL.md",
     "skills/**/schema.json"
   ],
-  "enforcement_mode": "warn",
   "publishers": [
     {
-      "type": "keyless",
+      "name": "github-ci",
       "issuer": "https://token.actions.githubusercontent.com",
       "repository": "lukehinds/scrutineer-attest-test",
       "workflow": ".github/workflows/sign-skills.yml",
-      "git_ref": "refs/heads/main"
+      "ref_pattern": "refs/heads/main"
     }
-  ]
+  ],
+  "blocklist": { "digests": [] },
+  "enforcement": "warn"
 }
