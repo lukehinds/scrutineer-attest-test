@@ -1,0 +1,26 @@
+{
+  "includes": [
+    "skills/**/SKILL.md",
+    "skills/**/schema.json"
+  ],
+  "enforcement_mode": "warn",
+  "publishers": [
+    {
+      "type": "keyless",
+      "issuer": "https://token.actions.githubusercontent.com",
+      "repository": "lukehinds/scrutineer-attest-test",
+      "workflow": ".github/workflows/sign-skills.yml",
+    "skills/**/SKILL.md",
+    "skills/**/schema.json"
+  ],
+  "enforcement_mode": "warn",
+  "publishers": [
+    {
+      "type": "keyless",
+      "issuer": "https://token.actions.githubusercontent.com",
+      "repository": "lukehinds/scrutineer-attest-test",
+      "workflow": ".github/workflows/sign-skills.yml",
+      "git_ref": "refs/heads/main"
+    }
+  ]
+}
