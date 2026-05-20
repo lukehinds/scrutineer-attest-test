@@ -7,36 +7,14 @@ on:
       - "skills/**"
   workflow_dispatch:
 
-permissions: {}
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+permissions:
+  id-token: write  # Sigstore keyless OIDC token
+  contents: write  # agent-sign commits .bundle sidecars back to main
 
 jobs:
   sign:
-    name: sign
+    if: github.repository == 'lukehinds/scrutineer-attest-test'
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write  # required for Sigstore keyless signing via GitHub OIDC
-      contents: write  # required to commit .bundle sidecars back to main
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: true
-          ref: main
-
-      - uses: always-further/agent-sign@v1 # zizmor: ignore[unpinned-uses]
-        with:
-          paths: |
-            skills/**/SKILL.md
-            skills/**/schema.json
-
-      - name: commit bundles
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add 'skills/**/*.bundle'
-          git diff --cached --quiet || git commit -m "chore: sign skill bundles [skip ci]"
-          git push
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: always-further/agent-sign@c9426f1a00f823dd53e7b9068d910a68b43e49e9 # v0.0.11
