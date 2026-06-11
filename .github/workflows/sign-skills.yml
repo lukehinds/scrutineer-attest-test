@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write  # Sigstore keyless OIDC token
-  contents: write  # agent-sign commits .bundle sidecars back to main
+  id-token: write
+  contents: write
 
 jobs:
   sign:
@@ -19,6 +19,12 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           persist-credentials: true
+      - name: Collect skill files
+        id: skill-files
+        run: |
+          files=$(find skills -type f \( -name "SKILL.md" -o -name "schema.json" \) | sort | tr '\n' ' ')
+          echo "list=$files" >> "$GITHUB_OUTPUT"
       - uses: always-further/agent-sign@c9426f1a00f823dd53e7b9068d910a68b43e49e9 # v0.0.11
         with:
           commit: true
+          files: ${{ steps.skill-files.outputs.list }}
