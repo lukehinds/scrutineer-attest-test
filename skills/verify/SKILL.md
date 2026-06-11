@@ -62,3 +62,4 @@ Scrutineer updates the finding's lifecycle status based on your answer:
 - `inconclusive` leaves the status alone
 
 Evidence and notes are appended to the finding's Notes field with a timestamp header so the analyst can read your trail later.
+
