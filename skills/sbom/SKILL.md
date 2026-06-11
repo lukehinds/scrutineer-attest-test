@@ -30,3 +30,4 @@ bash scripts/generate.sh > ./report.json
 If the script exits non-zero, write `{"error": "<stderr message>"}` to `./report.json` so the failure is visible on the scan page.
 
 The output is consumed as freeform (stored verbatim; no post-processing) so the CycloneDX document is preserved exactly as git-pkgs produced it.
+
