@@ -19,12 +19,19 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           persist-credentials: true
-      - name: Collect skill files
-        id: skill-files
-        run: |
-          files=$(find skills -type f \( -name "SKILL.md" -o -name "schema.json" \) | sort | tr '\n' ' ')
-          echo "list=$files" >> "$GITHUB_OUTPUT"
       - uses: always-further/agent-sign@c9426f1a00f823dd53e7b9068d910a68b43e49e9 # v0.0.11
         with:
-          commit: true
-          files: ${{ steps.skill-files.outputs.list }}
+          commit: false
+          per-file: true
+      - name: Commit per-file bundles
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mapfile -t bundles < <(find skills -type f -name "*.bundle")
+          if [ ${#bundles[@]} -eq 0 ]; then
+            echo "No bundle files found."
+            exit 0
+          fi
+          git add "${bundles[@]}"
+          git diff --cached --quiet && echo "No bundle changes to commit." || \
+            git commit -m "chore: update attestation bundles [skip ci]" && git push
